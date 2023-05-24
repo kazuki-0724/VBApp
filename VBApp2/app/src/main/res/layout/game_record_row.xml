@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:layout_weight="10"
+    >
+
+    <LinearLayout
+        android:id="@+id/linear_layout_item"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="8"
+        android:orientation="vertical"
+        android:weightSum="10"
+        >
+        <!--android:background="@drawable/list_item"-->
+
+        <TextView
+            android:id="@+id/match_name"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:paddingLeft="10dp"
+            android:layout_weight="8"
+            android:text="@string/match_name"
+            />
+
+        <TextView
+            android:id="@+id/match_day"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:gravity="end"
+            android:paddingRight="10dp"
+            android:layout_weight="2"
+            android:text="@string/match_day"
+            android:textColor="@color/white"
+            />
+
+
+
+
+    </LinearLayout>
+
+
+    <!--
+    <Button
+        android:id="@+id/watch_button"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginRight="10dp"
+        android:layout_weight="2"
+        android:text="@string/watch"
+        android:focusableInTouchMode = "false"
+        android:focusable = "false"
+        />
+        ↓listのクリックを優先して反応させるため
+        android:focusableInTouchMode = "false"
+        android:focusable = "false"
+    -->
+
+
+
+
+
+
+</LinearLayout>

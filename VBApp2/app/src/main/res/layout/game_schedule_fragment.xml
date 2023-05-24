@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <RadioGroup
+        android:id="@+id/sch_radioGroup"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        android:layout_margin="5dp"
+        android:paddingLeft="20dp"
+        >
+        <RadioButton android:id="@+id/sch_radiobutton_v"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/v"
+            android:layout_weight="1"
+            />
+        <RadioButton android:id="@+id/sch_radiobutton_italy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/s"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            />
+        <RadioButton android:id="@+id/sch_radiobutton_other"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nt"
+            android:layout_weight="1"
+            />
+    </RadioGroup>
+
+
+    <EditText
+        android:id="@+id/match_sch_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/match_name"
+        android:inputType="text"
+        android:layout_marginHorizontal="25dp"
+        android:layout_marginVertical="10dp"
+        />
+
+
+    <EditText
+        android:id="@+id/schedule_url_editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/match_url"
+        android:inputType="text"
+        android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="25dp"
+        />
+
+
+
+    <Button
+        android:id="@+id/addScheduleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add"
+        android:layout_gravity="end"
+        android:layout_marginEnd="10dp"
+        />
+
+
+</LinearLayout>
