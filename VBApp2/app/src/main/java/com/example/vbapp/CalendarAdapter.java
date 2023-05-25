@@ -28,30 +28,37 @@ import java.util.Locale;
  * グリッドのカレンダーの制御を行っているクラス
  */
 public class CalendarAdapter extends BaseAdapter {
-    private List<Date> dateArray = new ArrayList();
+
+    //日付のリスト
+    private List<Date> dateArray;
+    //Activityの種的なこと?
     private Context mContext;
+    //日付処理
     private DateManager mDateManager;
+    //レイアウトを切り替えるのに使う
     private LayoutInflater mLayoutInflater;
-
+    //フラグメントの処理のため
     private FragmentManager fragmentManager;
+    //
     private FragmentActivity fragmentActivity;
-
+    //カレンダーに予定を追加するダイアログ
     private GameScheduleAddDialogFragment gameScheduleAddDialogFragment;
-
-    private TextView dayTextView;
-
-    private TextView matchScheTextView;
-
+    //試合日程のリスト
     private List<GameRecord> gameScheduleList;
 
+    //セルのtextView
+    private TextView dayTextView;
+    //セルの試合内容
+    private TextView matchScheTextView;
 
 
-
-    //カスタムセルを拡張したらここでWigetを定義
+    //カスタムセルを拡張したらここでWidgetを定義
     private static class ViewHolder {
         public TextView dateText;
+        public TextView matchNameTextView;
     }
 
+    //コンストラクタ
     public CalendarAdapter(Context context, FragmentActivity fragmentActivity,
                            List<GameRecord> gameScheduleList){
         mContext = context;
@@ -60,13 +67,14 @@ public class CalendarAdapter extends BaseAdapter {
         dateArray = mDateManager.getDays();
         this.fragmentActivity = fragmentActivity;
         this.gameScheduleList = gameScheduleList;
+        this.dateArray = new ArrayList<>();
     }
+
 
     @Override
     public int getCount() {
         return dateArray.size();
     }
-
 
     /**
      * 一つのセルのViewの再定義
@@ -97,7 +105,7 @@ public class CalendarAdapter extends BaseAdapter {
 
         //日付のみ表示させる
         SimpleDateFormat dateFormat_d = new SimpleDateFormat("d", Locale.JAPAN);
-        dayTextView = (TextView) convertView.findViewById(R.id.day);
+        dayTextView = convertView.findViewById(R.id.day);
         dayTextView.setText(dateFormat_d.format(dateArray.get(position)));
 
         //リフレッシュ動作
@@ -146,36 +154,33 @@ public class CalendarAdapter extends BaseAdapter {
 
         //セルに関しての処理
         //セルをクリックしたときの
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        convertView.setOnClickListener(view -> {
 
-                SimpleDateFormat dF = new SimpleDateFormat("yyyy/MM/dd", Locale.JAPAN);
+            SimpleDateFormat dF = new SimpleDateFormat("yyyy/MM/dd", Locale.JAPAN);
 
-                /**確認用の**************************************************************/
-                Toast.makeText(parent.getContext(),
-                        dF.format(dateArray.get(position)),Toast.LENGTH_SHORT).show();
-                Log.d("debug","cell clicked");
-                /**********************************************************************/
+            //確認用の********************************************************************
+            //Toast.makeText(parent.getContext(),
+            //        dF.format(dateArray.get(position)),Toast.LENGTH_SHORT).show();
+            //Log.d("debug","cell clicked");
+            //***************************************************************************
 
 
 
-                fragmentManager = fragmentActivity.getSupportFragmentManager();
-                // DialogFragment を継承したAlertDialogFragmentのインスタンス
+            fragmentManager = fragmentActivity.getSupportFragmentManager();
+            // DialogFragment を継承したAlertDialogFragmentのインスタンス
 
-                //addした内容を反映するために
-                //viewは先頭からn個目ってだけのものだから、月替えても残る
-                matchScheTextView = (TextView) view.findViewById(R.id.match_sch);
+            //addした内容を反映するために
+            //viewは先頭からn個目ってだけのものだから、月替えても残る
+            matchScheTextView = view.findViewById(R.id.match_sch);
 
-                //↓↓ここで日付のStringを渡す
-                gameScheduleAddDialogFragment =
-                        new GameScheduleAddDialogFragment( dF.format(dateArray.get(position)),
-                                gameScheduleList);
+            //↓↓ここで日付のStringを渡す
+            gameScheduleAddDialogFragment =
+                    new GameScheduleAddDialogFragment( dF.format(dateArray.get(position)),
+                            gameScheduleList);
 
-                // DialogFragmentの表示
-                gameScheduleAddDialogFragment.show(fragmentManager, "test alert dialog");
+            // DialogFragmentの表示
+            gameScheduleAddDialogFragment.show(fragmentManager, "test alert dialog");
 
-            }
         });
 
         return convertView;

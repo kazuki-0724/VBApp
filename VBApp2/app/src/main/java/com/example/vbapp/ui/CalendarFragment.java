@@ -23,15 +23,17 @@ import java.util.List;
 
 public class CalendarFragment extends Fragment {
 
+    //カレンダーのビュー部分
     private GridView calendarGridView;
+    //カレンダーの機能
     private CalendarAdapter mCalendarAdapter;
-
-    private TextView textView;
-
+    //年と月のTextView
+    private TextView ymTextView;
+    //次の月に移動するボタン
     private Button prevButton;
-
+    //前の月に移動するボタン
     private Button nextButton;
-
+    //スケジュールのリスト
     private List<GameRecord> gameScheduleList;
 
 
@@ -50,7 +52,7 @@ public class CalendarFragment extends Fragment {
 
         //パーツを拾ってくる
         calendarGridView = view.findViewById(R.id.calendar_grid);
-        textView = view.findViewById(R.id.year_month);
+        ymTextView = view.findViewById(R.id.year_month);
         prevButton = view.findViewById(R.id.prevButton);
         nextButton = view.findViewById(R.id.nextButton);
 
@@ -60,14 +62,14 @@ public class CalendarFragment extends Fragment {
         calendarGridView.setAdapter(mCalendarAdapter);
 
         //カレンダーの年月を入れる
-        textView.setText(mCalendarAdapter.getTitle());
+        ymTextView.setText(mCalendarAdapter.getTitle());
 
 
-        //ボタンの名前設定
+        //ボタンの月設定
         updateButtonName();
 
         //カレンダーを戻す
-        textView.setOnClickListener(new View.OnClickListener() {
+        ymTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 setCurrentCalendar(view);
@@ -80,7 +82,7 @@ public class CalendarFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 mCalendarAdapter.prevMonth();
-                textView.setText(mCalendarAdapter.getTitle());
+                ymTextView.setText(mCalendarAdapter.getTitle());
                 updateButtonName();
             }
         });
@@ -90,7 +92,7 @@ public class CalendarFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 mCalendarAdapter.nextMonth();
-                textView.setText(mCalendarAdapter.getTitle());
+                ymTextView.setText(mCalendarAdapter.getTitle());
                 updateButtonName();
             }
         });
@@ -121,7 +123,7 @@ public class CalendarFragment extends Fragment {
 
 
     public void setCurrentCalendar(View v){
-        textView.setText(mCalendarAdapter.getRealCurrentMonth());
+        ymTextView.setText(mCalendarAdapter.getRealCurrentMonth());
         updateButtonName();
     }
 
