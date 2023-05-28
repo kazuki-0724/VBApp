@@ -6,13 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.vbapp.GameRecord;
 import com.example.vb.R;
@@ -38,9 +38,6 @@ public class ListFragment extends Fragment {
     private GameRecordDialogFragment gameRecordDialogFragment;
     private GameListAdapter gameListAdapter;
 
-    //視聴URLに飛ばすためのボタン
-    private Button watchButton;
-
     private String sampleURL = "https://www.volleyballworld.tv/video/473870/allianz-milano-vs-gas-sales-bluenergy-piacenza-3rd-place-playoff-replay";
 
     private AppDataBase db;
@@ -64,13 +61,13 @@ public class ListFragment extends Fragment {
 
         //List周りの処理
         gameRecordArrayList = new ArrayList<>();
-        gameListAdapter = new GameListAdapter(getContext(), getActivity(), gameRecordArrayList);
+        gameListAdapter = new GameListAdapter(getContext(), gameRecordArrayList);
         gameListView.setAdapter(gameListAdapter);
 
 
         //データベースのインスタンスを取得
         db = AppDatabaseSingleton.getInstance(getContext());
-        SelectTask selectTask = new SelectTask(db,getActivity(),gameRecordArrayList,gameListAdapter);
+        SelectTask selectTask = new SelectTask(db,gameRecordArrayList);
         selectTask.execute();
         gameListAdapter.notifyDataSetChanged();
 
@@ -95,10 +92,6 @@ public class ListFragment extends Fragment {
                 gameRecordDialogFragment.show(fragmentManager, "gameRecord dialog");
 
 
-
-                //for debug
-                //Toast.makeText(getContext(),tmp.getURL(),Toast.LENGTH_LONG).show();
-
             }
         });
 
@@ -116,21 +109,19 @@ public class ListFragment extends Fragment {
                 // DialogFragmentの表示
                 gameRecordAddDialogFragment.show(fragmentManager, "test alert dialog");
                 Log.d("debug","fab tapped");
+
             }
         });
 
 
 
 
-
-
-
         //for test**********************************************************************
-        GameRecord testGameRecord = new GameRecord("Milano VS Pia","2023/04/30",sampleURL,2);
-        GameRecord testGameRecord2 = new GameRecord("JTECKT VS Panasonic","2023/05/01",sampleURL,1);
-        gameRecordArrayList.add(testGameRecord);
-        gameRecordArrayList.add(testGameRecord2);
-        gameListAdapter.notifyDataSetChanged();
+        //GameRecord testGameRecord = new GameRecord("Milano VS Pia","2023/04/30",sampleURL,2);
+        //GameRecord testGameRecord2 = new GameRecord("JTECKT VS Panasonic","2023/05/01",sampleURL,1);
+        //gameRecordArrayList.add(testGameRecord);
+        //gameRecordArrayList.add(testGameRecord2);
+        //gameListAdapter.notifyDataSetChanged();
         //******************************************************************************
 
     }

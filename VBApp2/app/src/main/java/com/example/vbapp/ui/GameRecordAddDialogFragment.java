@@ -26,17 +26,19 @@ import java.util.List;
 
 public class GameRecordAddDialogFragment extends DialogFragment{
 
-    // 選択肢のリスト
-    private String[] menulist = {"Match Name", "date", "URL"};
-
-    AlertDialog dialog ;
-    AlertDialog.Builder alert;
-    View alertView;
+    //ダイアログ
+    private AlertDialog dialog ;
+    //ダイアログ生成用
+    private AlertDialog.Builder alert;
+    //ダイアログのView
+    private View alertView;
+    //gameRecordのリスト
     private List<GameRecord> gameRecordArrayList;
+    //listのアダプター
     private GameListAdapter gameListAdapter;
-
-    private TextView dayTextView;
-
+    //ダイアログの日付ピッカー用のTextView
+    private TextView datePickerTextView;
+    //database
     private AppDataBase db;
 
     public GameRecordAddDialogFragment(List<GameRecord> gameRecordArrayList,
@@ -62,7 +64,7 @@ public class GameRecordAddDialogFragment extends DialogFragment{
 
             // パーツを拾ってくる
             EditText nameEditText = alertView.findViewById(R.id.match_name_editText);
-            dayTextView = alertView.findViewById(R.id.match_day_TextView);
+            datePickerTextView = alertView.findViewById(R.id.match_day_TextView);
             EditText urlEditText = alertView.findViewById(R.id.match_url_editText);
             Button addButton = alertView.findViewById(R.id.addButton);
             RadioGroup radioGroup = alertView.findViewById(R.id.radioGroup);
@@ -75,7 +77,7 @@ public class GameRecordAddDialogFragment extends DialogFragment{
 
                     //GameRecordの要素取得
                     String name = nameEditText.getText().toString();
-                    String day = dayTextView.getText().toString();
+                    String day = datePickerTextView.getText().toString();
                     String url = urlEditText.getText().toString();
 
                     //ここでnullになる可能性←対応済み
@@ -86,7 +88,7 @@ public class GameRecordAddDialogFragment extends DialogFragment{
                         GameRecord gameRecord = new GameRecord(name, day, url, checkLeagueType(radioButton.getText().toString()));
 
                         //データの挿入処理
-                        InsertTask insertTask = new InsertTask(db,getActivity());
+                        InsertTask insertTask = new InsertTask(db);
                         insertTask.execute(gameRecord);
 
                         //Listにデータを追加
@@ -105,10 +107,10 @@ public class GameRecordAddDialogFragment extends DialogFragment{
             });
 
             //日付
-            dayTextView.setOnClickListener(new View.OnClickListener() {
+            datePickerTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    DialogFragment newFragment = new DatePick(dayTextView);
+                    DialogFragment newFragment = new DatePick(datePickerTextView);
                     newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
                 }
             });

@@ -90,7 +90,7 @@ public class GameRecordDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 //データの挿入処理
-                DeleteTask deleteTask = new DeleteTask(db,getActivity());
+                DeleteTask deleteTask = new DeleteTask(db);
                 deleteTask.execute(gameRecord);
                 gameRecordList.remove(gameRecord);
                 gameListAdapter.notifyDataSetChanged();

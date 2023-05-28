@@ -7,17 +7,27 @@ import com.example.vbapp.GameRecord;
 
 import java.lang.ref.WeakReference;
 
+
+/**
+ * データベースから特定のデータを削除する
+ */
 public class DeleteTask extends AsyncTask<GameRecord,Void,Integer> {
 
     private AppDataBase db;
-    private WeakReference weakReference;
 
-
-    public DeleteTask(AppDataBase db, Activity activity){
+    /**
+     * コンストラクタ
+     * @param db
+     */
+    public DeleteTask(AppDataBase db){
         this.db = db;
-        this.weakReference = new WeakReference<>(activity);
     }
 
+    /**
+     * データの削除
+     * @param gameRecords 削除するデータ
+     * @return
+     */
     @Override
     protected Integer doInBackground(GameRecord... gameRecords) {
 

@@ -10,6 +10,12 @@ import com.example.vbapp.GameRecord;
 
 import java.util.List;
 
+
+/**
+ * データベースの具体的な処理
+ */
+
+
 @Dao
 public interface GameRecordDao {
 

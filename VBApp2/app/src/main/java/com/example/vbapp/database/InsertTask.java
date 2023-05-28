@@ -7,15 +7,17 @@ import com.example.vbapp.GameRecord;
 
 import java.lang.ref.WeakReference;
 
+
+/**
+ * データを挿入するクラス
+ */
 public class InsertTask extends AsyncTask<GameRecord,Void,Integer> {
 
-    private WeakReference<Activity> weakReference;
     private AppDataBase db;
 
 
-    public InsertTask(AppDataBase db, Activity activity){
+    public InsertTask(AppDataBase db){
         this.db = db;
-        this.weakReference = new WeakReference<>(activity);
     }
 
 

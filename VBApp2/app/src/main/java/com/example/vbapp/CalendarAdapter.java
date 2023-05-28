@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.vb.R;
+import com.example.vbapp.ui.GameListAdapter;
 import com.example.vbapp.ui.GameScheduleAddDialogFragment;
 
 import java.text.SimpleDateFormat;
@@ -52,6 +53,7 @@ public class CalendarAdapter extends BaseAdapter {
     private TextView matchScheTextView;
 
 
+
     //カスタムセルを拡張したらここでWidgetを定義
     private static class ViewHolder {
         public TextView dateText;
@@ -67,8 +69,10 @@ public class CalendarAdapter extends BaseAdapter {
         dateArray = mDateManager.getDays();
         this.fragmentActivity = fragmentActivity;
         this.gameScheduleList = gameScheduleList;
-        this.dateArray = new ArrayList<>();
+
     }
+
+
 
 
     @Override
@@ -87,6 +91,8 @@ public class CalendarAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         ViewHolder holder;
+
+        Log.d("CalendarAdapter#getView()","セル挿入");
 
         if (convertView == null) {
             convertView = mLayoutInflater.inflate(R.layout.calendar_cell, null);
@@ -177,6 +183,8 @@ public class CalendarAdapter extends BaseAdapter {
             gameScheduleAddDialogFragment =
                     new GameScheduleAddDialogFragment( dF.format(dateArray.get(position)),
                             gameScheduleList);
+
+            notifyDataSetChanged();
 
             // DialogFragmentの表示
             gameScheduleAddDialogFragment.show(fragmentManager, "test alert dialog");

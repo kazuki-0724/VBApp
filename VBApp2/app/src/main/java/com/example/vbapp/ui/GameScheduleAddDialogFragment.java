@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
@@ -18,6 +19,8 @@ import com.example.vbapp.CalendarAdapter;
 import com.example.vbapp.GameRecord;
 import com.example.vb.R;
 import com.example.vbapp.database.AppDataBase;
+import com.example.vbapp.database.AppDatabaseSingleton;
+import com.example.vbapp.database.InsertTask;
 
 import java.util.List;
 
@@ -43,9 +46,11 @@ public class GameScheduleAddDialogFragment extends DialogFragment {
     private CalendarAdapter calendarAdapter;
 
     public GameScheduleAddDialogFragment(String title,
-                                         List<GameRecord> gameScheduleList){
+                                         List<GameRecord> gameScheduleList ){
         this.title = title;
         this.gameScheduleList = gameScheduleList;
+        //this.calendarAdapter = calendarAdapter;
+        this.db = AppDatabaseSingleton.getInstance(getContext());
     }
 
 
@@ -80,11 +85,24 @@ public class GameScheduleAddDialogFragment extends DialogFragment {
                 //ここでリストに突っ込む
                 if(radioButton != null) {
                     GameRecord gr = new GameRecord(matchName, title, "", checkLeagueType(radioButton.getText().toString()));
+
+                    //データの挿入処理
+                    InsertTask insertTask = new InsertTask(db);
+                    insertTask.execute(gr);
+
+                    //とりあえず外で呼ぶ
+                    //calendarAdapter.notifyDataSetChanged();
+
                     gameScheduleList.add(gr);
                     Log.d("debug size Check",gameScheduleList.size()+"");
+
+                    dialog.dismiss();
+
+                }else{
+                    //radio Buttonのチェックがないとnullになるから
+                    Toast.makeText(getContext(),"check league type",Toast.LENGTH_SHORT).show();
                 }
 
-                dialog.dismiss();
             }
         });
 

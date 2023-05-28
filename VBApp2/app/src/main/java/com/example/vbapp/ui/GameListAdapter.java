@@ -18,22 +18,16 @@ import java.util.List;
 
 public class GameListAdapter extends BaseAdapter {
 
-    private Context context;
+    //レイアウト処理するための
     private LayoutInflater layoutInflater = null;
+    //gameのレコードを追記
     private List<GameRecord> gameRecordList;
-
-    private int tappedPosition = 0;
-
-    private Activity activity;
 
 
     //コンストラクタ
-    public GameListAdapter(Context context, Activity activity,List<GameRecord> gameRecordList){
-        this.context = context;
+    public GameListAdapter(Context context, List<GameRecord> gameRecordList){
         this.gameRecordList = gameRecordList;
-        this.activity =activity;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
     }
 
 
@@ -58,6 +52,7 @@ public class GameListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
 
+        //新たにViewを差し替える
         view = layoutInflater.inflate(R.layout.game_record_row,viewGroup,false);
 
 
@@ -88,9 +83,6 @@ public class GameListAdapter extends BaseAdapter {
         }
 
         //Animation objectを作成
-        //Animation anime = AnimationUtils.loadAnimation(viewGroup.getContext(), R.anim.item_motion);
-        //view.setAnimation(anime);
-
         // XMLで定義したアニメーションを読み込む
         Animation anim = AnimationUtils.loadAnimation(view.getContext(), R.anim.item_motion);
         // リストアイテムのアニメーションを開始

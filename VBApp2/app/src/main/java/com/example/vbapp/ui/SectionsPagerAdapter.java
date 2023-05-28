@@ -1,6 +1,7 @@
 package com.example.vbapp.ui;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -27,13 +28,17 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         Fragment fragment = null;
 
-        //何枚目のタブか
+
+
+        //何枚目のタブか(はじめだけ呼ばれる)
         switch (position){
             case 0:
                 fragment = new ListFragment();
+                Log.d("SPA","List側のフラグメント");
                 break;
             case 1:
                 fragment = new CalendarFragment();
+                Log.d("SPA","カレンダー側のフラグメント");
                 break;
         }
 

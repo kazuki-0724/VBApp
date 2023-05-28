@@ -12,10 +12,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.vb.R;
 import com.example.vbapp.CalendarAdapter;
 import com.example.vbapp.GameRecord;
+import com.example.vbapp.database.AppDataBase;
+import com.example.vbapp.database.AppDatabaseSingleton;
+import com.example.vbapp.database.SelectTask;
 
 
 import java.util.ArrayList;
@@ -36,6 +40,8 @@ public class CalendarFragment extends Fragment {
     //スケジュールのリスト
     private List<GameRecord> gameScheduleList;
 
+    private AppDataBase db;
+
 
     @Nullable
     @Override
@@ -50,16 +56,30 @@ public class CalendarFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //なんか書くときはこの部分に書く
 
+
         //パーツを拾ってくる
         calendarGridView = view.findViewById(R.id.calendar_grid);
         ymTextView = view.findViewById(R.id.year_month);
         prevButton = view.findViewById(R.id.prevButton);
         nextButton = view.findViewById(R.id.nextButton);
 
+
         //カレンダー周りの準備
         gameScheduleList = new ArrayList<>();
+        //0528追記：データベースのインスタンスを取得
+        db = AppDatabaseSingleton.getInstance(getContext());
+        //読み込み処理
+        SelectTask selectTask = new SelectTask(db,gameScheduleList);
+        selectTask.execute();
+
         mCalendarAdapter = new CalendarAdapter(getContext(),getActivity(),gameScheduleList);
         calendarGridView.setAdapter(mCalendarAdapter);
+
+
+        //読み込んだもので更新
+        //notify()してあげないとlistに反映されないっぽい
+        mCalendarAdapter.notifyDataSetChanged();
+
 
         //カレンダーの年月を入れる
         ymTextView.setText(mCalendarAdapter.getTitle());
