@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.vbapp.CalendarAdapter;
 import com.example.vbapp.GameRecord;
@@ -45,12 +46,17 @@ public class GameScheduleAddDialogFragment extends DialogFragment {
 
     private CalendarAdapter calendarAdapter;
 
+    private FragmentManager fragmentManager;
+
     public GameScheduleAddDialogFragment(String title,
-                                         List<GameRecord> gameScheduleList ){
+                                         List<GameRecord> gameScheduleList,
+                                         FragmentManager fragmentManager
+                                         ){
         this.title = title;
         this.gameScheduleList = gameScheduleList;
         //this.calendarAdapter = calendarAdapter;
         this.db = AppDatabaseSingleton.getInstance(getContext());
+        this.fragmentManager = fragmentManager;
     }
 
 
@@ -97,6 +103,12 @@ public class GameScheduleAddDialogFragment extends DialogFragment {
                     Log.d("debug size Check",gameScheduleList.size()+"");
 
                     dialog.dismiss();
+
+
+                    //ここで向こう側のnotify()呼ぶ
+                    Bundle bundle = new Bundle();
+                    fragmentManager.setFragmentResult("fromCF",bundle);
+
 
                 }else{
                     //radio Buttonのチェックがないとnullになるから

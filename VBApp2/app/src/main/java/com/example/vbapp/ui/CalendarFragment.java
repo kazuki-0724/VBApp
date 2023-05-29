@@ -8,10 +8,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.vb.R;
@@ -43,6 +45,10 @@ public class CalendarFragment extends Fragment {
     private AppDataBase db;
 
 
+    public CalendarFragment(List<GameRecord> list){
+        this.gameScheduleList = list;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -56,6 +62,16 @@ public class CalendarFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //なんか書くときはこの部分に書く
 
+        getParentFragmentManager().setFragmentResultListener("fromLF",
+                this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String key, @NonNull Bundle bundle) {
+                //↓を呼ぶためにここを使う
+                mCalendarAdapter.notifyDataSetChanged();
+                //Toast.makeText(getContext(),"notify CA gla#notify() called",Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         //パーツを拾ってくる
         calendarGridView = view.findViewById(R.id.calendar_grid);
@@ -65,14 +81,15 @@ public class CalendarFragment extends Fragment {
 
 
         //カレンダー周りの準備
-        gameScheduleList = new ArrayList<>();
+        //gameScheduleList = new ArrayList<>();
         //0528追記：データベースのインスタンスを取得
         db = AppDatabaseSingleton.getInstance(getContext());
-        //読み込み処理
-        SelectTask selectTask = new SelectTask(db,gameScheduleList);
-        selectTask.execute();
 
-        mCalendarAdapter = new CalendarAdapter(getContext(),getActivity(),gameScheduleList);
+        //読み込み処理(List側でやってるからいらない)
+        //SelectTask selectTask = new SelectTask(db,gameScheduleList);
+        //selectTask.execute();
+
+        mCalendarAdapter = new CalendarAdapter(getContext(),getActivity(),gameScheduleList,getParentFragmentManager());
         calendarGridView.setAdapter(mCalendarAdapter);
 
 

@@ -2,6 +2,7 @@ package com.example.vbapp;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
@@ -18,6 +20,7 @@ import com.example.vb.R;
 import com.example.vbapp.ui.GameListAdapter;
 import com.example.vbapp.ui.GameScheduleAddDialogFragment;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,7 +31,7 @@ import java.util.Locale;
 /**
  * グリッドのカレンダーの制御を行っているクラス
  */
-public class CalendarAdapter extends BaseAdapter {
+public class CalendarAdapter extends BaseAdapter implements Serializable {
 
     //日付のリスト
     private List<Date> dateArray;
@@ -52,6 +55,9 @@ public class CalendarAdapter extends BaseAdapter {
     //セルの試合内容
     private TextView matchScheTextView;
 
+    private CalendarAdapter calendarAdapter;
+
+    private FragmentManager parentFragmentManager;
 
 
     //カスタムセルを拡張したらここでWidgetを定義
@@ -62,14 +68,16 @@ public class CalendarAdapter extends BaseAdapter {
 
     //コンストラクタ
     public CalendarAdapter(Context context, FragmentActivity fragmentActivity,
-                           List<GameRecord> gameScheduleList){
+                           List<GameRecord> gameScheduleList,
+                           FragmentManager fragmentManager){
         mContext = context;
         mLayoutInflater = LayoutInflater.from(mContext);
         mDateManager = new DateManager();
         dateArray = mDateManager.getDays();
         this.fragmentActivity = fragmentActivity;
         this.gameScheduleList = gameScheduleList;
-
+        this.calendarAdapter = this;
+        this.parentFragmentManager = fragmentManager;
     }
 
 
@@ -182,7 +190,7 @@ public class CalendarAdapter extends BaseAdapter {
             //↓↓ここで日付のStringを渡す
             gameScheduleAddDialogFragment =
                     new GameScheduleAddDialogFragment( dF.format(dateArray.get(position)),
-                            gameScheduleList);
+                            gameScheduleList,parentFragmentManager);
 
             notifyDataSetChanged();
 

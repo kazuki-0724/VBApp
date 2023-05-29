@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.vbapp.DatePick;
 import com.example.vbapp.GameRecord;
@@ -41,11 +42,16 @@ public class GameRecordAddDialogFragment extends DialogFragment{
     //database
     private AppDataBase db;
 
+    private FragmentManager fragmentManager;
+
     public GameRecordAddDialogFragment(List<GameRecord> gameRecordArrayList,
-                                       GameListAdapter gameListAdapter,AppDataBase db){
+                                       GameListAdapter gameListAdapter,AppDataBase db,
+                                       FragmentManager fragmentManager
+                                       ){
         this.gameRecordArrayList = gameRecordArrayList;
         this.gameListAdapter = gameListAdapter;
         this.db = db;
+        this.fragmentManager = fragmentManager;
     }
 
 
@@ -97,6 +103,10 @@ public class GameRecordAddDialogFragment extends DialogFragment{
                         gameListAdapter.notifyDataSetChanged();
                         //dialogを閉じる処理
                         dialog.dismiss();
+
+                        //ここで向こう側のnotify()呼ぶ
+                        Bundle bundle = new Bundle();
+                        fragmentManager.setFragmentResult("fromLF", bundle);
 
                     }else{
                         //radio Buttonのチェックがないとnullになるから

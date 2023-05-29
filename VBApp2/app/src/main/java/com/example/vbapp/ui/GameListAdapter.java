@@ -14,9 +14,10 @@ import android.widget.TextView;
 import com.example.vbapp.GameRecord;
 import com.example.vb.R;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class GameListAdapter extends BaseAdapter {
+public class GameListAdapter extends BaseAdapter implements Serializable {
 
     //レイアウト処理するための
     private LayoutInflater layoutInflater = null;

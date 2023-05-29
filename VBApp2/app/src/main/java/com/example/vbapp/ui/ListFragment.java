@@ -6,14 +6,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.vbapp.CalendarAdapter;
 import com.example.vbapp.GameRecord;
 import com.example.vb.R;
 import com.example.vbapp.database.AppDataBase;
@@ -22,12 +26,13 @@ import com.example.vbapp.database.SelectTask;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ListFragment extends Fragment {
 
     //GameList
     private ListView gameListView;
-    private ArrayList<GameRecord> gameRecordArrayList;
+    private List<GameRecord> gameRecordArrayList;
 
     private FloatingActionButton fab;
 
@@ -42,6 +47,9 @@ public class ListFragment extends Fragment {
 
     private AppDataBase db;
 
+    public ListFragment(List<GameRecord> gameRecordList){
+        this.gameRecordArrayList = gameRecordList;
+    }
 
     @Nullable
     @Override
@@ -54,13 +62,24 @@ public class ListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        getParentFragmentManager().setFragmentResultListener("fromCF",
+                this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String key, @NonNull Bundle bundle) {
+                //別にバンドルはいらない
+                //↓の処理をやるためにここは使っている
+                gameListAdapter.notifyDataSetChanged();
+                //Toast.makeText(getContext(),"notify GLA gla#notify() called",Toast.LENGTH_SHORT).show();
+            }
+        });
 
         //パーツを拾ってくる
         fab = view.findViewById(R.id.fab);
         gameListView = view.findViewById(R.id.gameList);
 
         //List周りの処理
-        gameRecordArrayList = new ArrayList<>();
+        //gameRecordArrayList = new ArrayList<>();
+        //上位クラスで作ったものを渡している
         gameListAdapter = new GameListAdapter(getContext(), gameRecordArrayList);
         gameListView.setAdapter(gameListAdapter);
 
@@ -87,7 +106,8 @@ public class ListFragment extends Fragment {
                 fragmentManager = getActivity().getSupportFragmentManager();
 
                 // DialogFragment を継承したAlertDialogFragmentのインスタンス
-                gameRecordDialogFragment = new GameRecordDialogFragment(tmp,db,gameListAdapter,gameRecordArrayList);
+                gameRecordDialogFragment = new GameRecordDialogFragment(tmp,db,gameListAdapter,
+                        gameRecordArrayList,getParentFragmentManager());
                 // DialogFragmentの表示
                 gameRecordDialogFragment.show(fragmentManager, "gameRecord dialog");
 
@@ -105,26 +125,18 @@ public class ListFragment extends Fragment {
                 fragmentManager = getActivity().getSupportFragmentManager();
 
                 // DialogFragment を継承したAlertDialogFragmentのインスタンス
-                gameRecordAddDialogFragment = new GameRecordAddDialogFragment(gameRecordArrayList,gameListAdapter,db);
+                gameRecordAddDialogFragment = new GameRecordAddDialogFragment(
+                        gameRecordArrayList,gameListAdapter,db,getParentFragmentManager());
                 // DialogFragmentの表示
                 gameRecordAddDialogFragment.show(fragmentManager, "test alert dialog");
                 Log.d("debug","fab tapped");
+
 
             }
         });
 
 
-
-
-        //for test**********************************************************************
-        //GameRecord testGameRecord = new GameRecord("Milano VS Pia","2023/04/30",sampleURL,2);
-        //GameRecord testGameRecord2 = new GameRecord("JTECKT VS Panasonic","2023/05/01",sampleURL,1);
-        //gameRecordArrayList.add(testGameRecord);
-        //gameRecordArrayList.add(testGameRecord2);
-        //gameListAdapter.notifyDataSetChanged();
-        //******************************************************************************
-
     }
-
-
 }
+
+

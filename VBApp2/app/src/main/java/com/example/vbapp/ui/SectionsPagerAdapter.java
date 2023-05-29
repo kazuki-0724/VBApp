@@ -2,11 +2,18 @@ package com.example.vbapp.ui;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.BaseAdapter;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+
+import com.example.vbapp.GameRecord;
+import com.example.vbapp.database.AppDataBase;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -16,8 +23,14 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     String[] tabs_name = {"List","Calendar"};
 
+    private List<GameRecord> list;
+
+    private BaseAdapter baseAdapter;
+
     public SectionsPagerAdapter(Context context, FragmentManager fm) {
         super(fm);
+        //どうせ使うistは同じものだから
+        list = new ArrayList<>();
     }
 
     @Override
@@ -33,11 +46,11 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         //何枚目のタブか(はじめだけ呼ばれる)
         switch (position){
             case 0:
-                fragment = new ListFragment();
+                fragment = new ListFragment(list);
                 Log.d("SPA","List側のフラグメント");
                 break;
             case 1:
-                fragment = new CalendarFragment();
+                fragment = new CalendarFragment(list);
                 Log.d("SPA","カレンダー側のフラグメント");
                 break;
         }

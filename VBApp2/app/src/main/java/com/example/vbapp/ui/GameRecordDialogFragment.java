@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.vbapp.GameRecord;
 import com.example.vb.R;
@@ -35,13 +36,16 @@ public class GameRecordDialogFragment extends DialogFragment {
 
     private List<GameRecord> gameRecordList;
 
+    private FragmentManager fragmentManager;
+
     public GameRecordDialogFragment(GameRecord gameRecord, AppDataBase db, GameListAdapter gameListAdapter,
-                                    List<GameRecord> gameRecordList){
+                                    List<GameRecord> gameRecordList, FragmentManager fragmentManager){
         //フラグメント生成のためにタップされた試合のレコードを貰う
         this.gameRecord = gameRecord;
         this.db = db;
         this.gameListAdapter = gameListAdapter;
         this.gameRecordList = gameRecordList;
+        this.fragmentManager = fragmentManager;
     }
 
 
@@ -94,6 +98,10 @@ public class GameRecordDialogFragment extends DialogFragment {
                 deleteTask.execute(gameRecord);
                 gameRecordList.remove(gameRecord);
                 gameListAdapter.notifyDataSetChanged();
+
+                //ここで向こう側のnotify()呼ぶ
+                Bundle bundle = new Bundle();
+                fragmentManager.setFragmentResult("fromLF", bundle);
 
                 dialog.dismiss();
             }
